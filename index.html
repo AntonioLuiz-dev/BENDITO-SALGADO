@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delicias da Mira Oliveira - Salgados Artesanais</title>
+  <meta name="description" content="Os melhores salgados artesanais para sua festa ou evento. Delivery e retirada.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">🥟</span>
+        <div class="logo-text">
+          <h1>Delicias da Mira</h1>
+          <span class="logo-subtitle">Salgados Artesanais</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="store-status" id="storeStatus">
+          <span class="status-dot"></span>
+          <span class="status-text">Verificando...</span>
+        </div>
+        <button class="cart-btn" id="cartBtn" onclick="toggleCart()">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Salgados fresquinhos para sua festa!</h2>
+      <p>Congelados ou assados na hora. Qualidade artesanal com o carinho de sempre.</p>
+      <div class="hero-badges">
+        <span class="badge" id="badgeDelivery"><span>🛵</span> Delivery</span>
+        <span class="badge" id="badgeRetirada"><span>🏪</span> Retirada</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BARRA DE CATEGORIAS -->
+  <nav class="category-bar" id="categoryBar">
+    <div class="category-bar-inner">
+      <button class="category-pill active" data-filter="todos" onclick="filterProducts('todos', this)">Todos</button>
+    </div>
+  </nav>
+
+  <!-- CONTEUDO PRINCIPAL -->
+  <main class="main-content">
+    <div class="products-grid" id="productsGrid">
+      <!-- Produtos serao carregados via JS -->
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Carregando cardapio...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- CARRINHO LATERAL -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Seu Pedido</h3>
+      <button class="cart-close" onclick="toggleCart()">&times;</button>
+    </div>
+    
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <span>🛒</span>
+        <p>Seu carrinho esta vazio</p>
+      </div>
+    </div>
+    
+    <div class="cart-footer" id="cartFooter" style="display: none;">
+      <div class="delivery-options">
+        <label class="delivery-option">
+          <input type="radio" name="deliveryType" value="retirada" checked onchange="updateDeliveryType()">
+          <span class="option-content">
+            <span class="option-icon">🏪</span>
+            <span class="option-text">Retirada</span>
+            <span class="option-price">Gratis</span>
+          </span>
+        </label>
+        <label class="delivery-option" id="deliveryOptionLabel">
+          <input type="radio" name="deliveryType" value="delivery" onchange="updateDeliveryType()">
+          <span class="option-content">
+            <span class="option-icon">🛵</span>
+            <span class="option-text">Delivery</span>
+            <span class="option-price" id="deliveryFeeDisplay">R$ 5,00</span>
+          </span>
+        </label>
+      </div>
+      
+      <div class="cart-totals">
+        <div class="cart-subtotal">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">R$ 0,00</span>
+        </div>
+        <div class="cart-delivery" id="cartDeliveryRow" style="display: none;">
+          <span>Taxa de entrega</span>
+          <span id="cartDeliveryFee">R$ 5,00</span>
+        </div>
+        <div class="cart-total">
+          <span>Total</span>
+          <span id="cartTotal">R$ 0,00</span>
+        </div>
+      </div>
+      
+      <div class="customer-info">
+        <input type="text" id="customerName" placeholder="Seu nome" required>
+        <input type="tel" id="customerPhone" placeholder="Seu telefone" required>
+        <div id="addressField" style="display: none;">
+          <textarea id="customerAddress" placeholder="Endereco completo para entrega" rows="2"></textarea>
+        </div>
+        <textarea id="customerNotes" placeholder="Observacoes (opcional)" rows="2"></textarea>
+      </div>
+      
+      <button class="checkout-btn" id="checkoutBtn" onclick="sendToWhatsApp()">
+        <span>📱</span> Enviar Pedido via WhatsApp
+      </button>
+    </div>
+  </aside>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>📞 <span id="footerPhone">(21) 96477-0258</span></p>
+      <p>Feito com ❤️ por Mira Oliveira</p>
+      <a href="admin.html" class="admin-link">Area Administrativa</a>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
